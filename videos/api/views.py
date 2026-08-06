@@ -14,7 +14,7 @@ from .serializers import VideoSerializer
 class VideoListView(generics.ListAPIView):
 
     serializer_class = VideoSerializer
-    queryset = Video.objects.all()
+    queryset = Video.objects.all().order_by("-created_at")
     permission_classes = [
         IsAuthenticated
     ]

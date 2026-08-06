@@ -239,12 +239,27 @@ class RefreshTokenView(APIView):
 
 class LogoutView(APIView):
 
-    permission_classes = [AllowAny]
+    permission_classes = [
+        AllowAny
+    ]
 
-    def post(
-        self,
-        request,
-    ):
+    def post(self, request):
+
+        refresh_token = request.COOKIES.get(
+            "refresh_token"
+        )
+
+        if refresh_token:
+
+            try:
+                token = RefreshToken(
+                    refresh_token
+                )
+
+                token.blacklist()
+
+            except Exception:
+                pass
 
         response = Response(
             {
