@@ -9,17 +9,24 @@ class VideoAdmin(admin.ModelAdmin):
         "id",
         "title",
         "category",
+        "hls_ready",
         "created_at",
     )
 
     list_filter = (
         "category",
+        "hls_ready",
         "created_at",
     )
 
     search_fields = (
         "title",
         "description",
+    )
+
+    readonly_fields = (
+        "hls_ready",
+        "created_at",
     )
 
     ordering = (
