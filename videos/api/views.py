@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from django.core.cache import cache
 
 from django.conf import settings
 from django.http import FileResponse, Http404
@@ -12,6 +13,33 @@ from .serializers import VideoSerializer
 
 
 class VideoListView(generics.ListAPIView):
+
+    serializer_class = VideoSerializer
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get_queryset(self):
+
+        cached_videos = cache.get(
+            "video_list"
+        )
+
+        if cached_videos:
+            return cached_videos
+
+        videos = Video.objects.all().order_by(
+            "-created_at"
+        )
+
+        cache.set(
+            "video_list",
+            videos,
+            timeout=300
+        )
+
+        return videos
 
     serializer_class = VideoSerializer
     queryset = Video.objects.all().order_by("-created_at")

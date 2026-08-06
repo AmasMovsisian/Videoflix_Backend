@@ -6,7 +6,6 @@ from django.conf import settings
 from .models import Video
 
 
-
 def convert_video_to_hls(video_id):
 
     video = Video.objects.get(
@@ -93,12 +92,15 @@ def convert_video_to_hls(video_id):
             check=True
         )
 
-    # Nach erfolgreicher Erstellung aller Streams
     create_master_playlist(video.id)
 
     video.hls_ready = True
 
-    video.save()
+    video.save(
+        update_fields=[
+            "hls_ready"
+        ]
+    )
 
 
 def create_master_playlist(video_id):
