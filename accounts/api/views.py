@@ -179,6 +179,7 @@ class LoginView(APIView):
 
         return response
 
+
 class RefreshTokenView(APIView):
 
     permission_classes = [AllowAny]
@@ -226,7 +227,6 @@ class RefreshTokenView(APIView):
 
             return response
 
-
         except Exception:
 
             return Response(
@@ -263,6 +263,7 @@ class LogoutView(APIView):
 
         return response
 
+
 class PasswordResetRequestView(APIView):
 
     permission_classes = [AllowAny]
@@ -291,7 +292,6 @@ class PasswordResetRequestView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-
         uid = urlsafe_base64_encode(
             force_bytes(user.pk)
         )
@@ -300,14 +300,12 @@ class PasswordResetRequestView(APIView):
             user
         )
 
-
         reset_url = (
             f"{settings.FRONTEND_URL}"
             f"/reset-password/"
             f"{uid}/"
             f"{token}/"
         )
-
 
         send_mail(
             subject="Reset your Videoflix password",
@@ -319,13 +317,13 @@ class PasswordResetRequestView(APIView):
             recipient_list=[user.email],
         )
 
-
         return Response(
             {
                 "message": "An email has been sent to reset your password."
             },
             status=status.HTTP_200_OK,
         )
+
 
 class PasswordResetConfirmView(APIView):
 

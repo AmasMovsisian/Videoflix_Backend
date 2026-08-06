@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     "django_rq",
 
     "accounts",
-    "videos",
+    "videos.apps.VideosConfig",
 ]
 
 

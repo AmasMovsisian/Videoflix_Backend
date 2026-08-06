@@ -7,18 +7,10 @@ from django.utils.http import urlsafe_base64_encode
 
 
 def create_activation_token(user):
-    """
-    Erstellt einen Aktivierungstoken für einen Benutzer.
-    """
-
     return default_token_generator.make_token(user)
 
 
 def create_activation_url(user, token):
-    """
-    Erstellt den Aktivierungslink.
-    """
-
     uid = urlsafe_base64_encode(
         force_bytes(user.pk)
     )
@@ -38,10 +30,6 @@ def create_activation_url(user, token):
 
 
 def send_activation_email(user):
-    """
-    Verschickt die Aktivierungsmail.
-    """
-
     token = create_activation_token(
         user
     )
