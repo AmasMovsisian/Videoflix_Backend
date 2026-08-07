@@ -13,22 +13,15 @@ def create_activation_token(user):
 
 
 def create_activation_url(user, token):
-    """Build and return the full activation URL with encoded user ID and token."""
+    """Build activation URL for the frontend."""
+
     uid = urlsafe_base64_encode(
         force_bytes(user.pk)
     )
 
-    activation_path = reverse(
-        "activate-account",
-        kwargs={
-            "uidb64": uid,
-            "token": token,
-        },
-    )
-
     return (
-        f"{settings.FRONTEND_URL}"
-        f"{activation_path}"
+        f"{settings.FRONTEND_URL}/pages/auth/activate.html"
+        f"?uid={uid}&token={token}"
     )
 
 

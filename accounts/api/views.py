@@ -99,11 +99,7 @@ class ActivateAccountView(APIView):
 
             return Response(
                 {
-                    "message": "Account activated successfully.",
-                    "user": {
-                        "id": user.id,
-                        "email": user.email,
-                    }
+                    "message": "Account successfully activated."
                 },
                 status=status.HTTP_200_OK
             )
