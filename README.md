@@ -6,10 +6,7 @@ The backend uses **FFmpeg** for video transcoding, **PostgreSQL** for persistent
 
 ---
 
-
-
 # Table of Contents
-
 
 - [Frontend](#frontend)
 - [About the Project](#about-the-project)
@@ -293,7 +290,6 @@ Flow:
 4. Refresh tokens when needed.
 5. Logout invalidates tokens.
 
-
 HTTP-only cookies prevent client-side JavaScript access to tokens.
 
 ---
@@ -308,25 +304,25 @@ HLS adaptive streaming allows the client to switch between multiple resolutions 
 
 ## Authentication
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/api/register/` | Register a new user |
-| GET | `/api/activate/<uid>/<token>/` | Activate user account |
-| POST | `/api/login/` | Login user |
-| POST | `/api/logout/` | Logout user |
-| POST | `/api/token/refresh/` | Refresh access token |
-| POST | `/api/password_reset/` | Request password reset |
-| POST | `/api/password_confirm/<uid>/<token>/` | Confirm password reset |
+| Method | Endpoint                               | Description            |
+| ------ | -------------------------------------- | ---------------------- |
+| POST   | `/api/register/`                       | Register a new user    |
+| GET    | `/api/activate/<uid>/<token>/`         | Activate user account  |
+| POST   | `/api/login/`                          | Login user             |
+| POST   | `/api/logout/`                         | Logout user            |
+| POST   | `/api/token/refresh/`                  | Refresh access token   |
+| POST   | `/api/password_reset/`                 | Request password reset |
+| POST   | `/api/password_confirm/<uid>/<token>/` | Confirm password reset |
 
 ---
 
 ## Videos
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/video/` | Retrieve all videos |
-| GET | `/api/video/<id>/<resolution>/index.m3u8` | Retrieve HLS playlist |
-| GET | `/api/video/<id>/<resolution>/<segment>/` | Retrieve HLS video segment |
+| Method | Endpoint                                  | Description                |
+| ------ | ----------------------------------------- | -------------------------- |
+| GET    | `/api/video/`                             | Retrieve all videos        |
+| GET    | `/api/video/<id>/<resolution>/index.m3u8` | Retrieve HLS playlist      |
+| GET    | `/api/video/<id>/<resolution>/<segment>/` | Retrieve HLS video segment |
 
 ---
 
@@ -337,5 +333,3 @@ HLS adaptive streaming allows the client to switch between multiple resolutions 
 Backend Developer
 
 ---
-
-

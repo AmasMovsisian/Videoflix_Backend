@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 
 
 class UserManager(BaseUserManager):
+    """Manager for the custom User model with email-based authentication."""
 
     def create_user(
         self,
@@ -9,7 +10,7 @@ class UserManager(BaseUserManager):
         password=None,
         **extra_fields
     ):
-
+        """Create, save and return a regular user with the given email and password."""
         if not email:
             raise ValueError(
                 "Email is required"
@@ -40,7 +41,7 @@ class UserManager(BaseUserManager):
         password=None,
         **extra_fields
     ):
-
+        """Create, save and return a superuser with elevated permissions."""
         extra_fields.setdefault(
             "is_staff",
             True

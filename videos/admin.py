@@ -4,6 +4,7 @@ from .models import Video
 
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
+    """Admin interface configuration for the Video model."""
 
     list_display = (
         "id",

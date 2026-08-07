@@ -2,9 +2,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class CookieJWTAuthentication(JWTAuthentication):
+    """JWT authentication that reads the access token from cookies instead of headers."""
 
     def authenticate(self, request):
-
+        """Authenticate user by validating the access token stored in cookies."""
         access_token = request.COOKIES.get(
             "access_token"
         )

@@ -4,6 +4,7 @@ from videos.models import Video
 
 
 class VideoSerializer(serializers.ModelSerializer):
+    """Serializer for video objects with absolute thumbnail URL."""
 
     thumbnail_url = serializers.SerializerMethodField()
 
@@ -24,7 +25,7 @@ class VideoSerializer(serializers.ModelSerializer):
         self,
         obj,
     ):
-
+        """Return the absolute URL for the thumbnail if available, else None."""
         request = self.context.get(
             "request"
         )

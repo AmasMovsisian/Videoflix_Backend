@@ -7,7 +7,7 @@ from .models import Video
 
 
 def convert_video_to_hls(video_id):
-
+    """Convert the original video to HLS format in multiple resolutions."""
     video = Video.objects.get(
         id=video_id
     )
@@ -104,7 +104,7 @@ def convert_video_to_hls(video_id):
 
 
 def create_master_playlist(video_id):
-
+    """Generate the master HLS playlist referencing all available resolutions."""
     hls_path = os.path.join(
         settings.MEDIA_ROOT,
         "videos",

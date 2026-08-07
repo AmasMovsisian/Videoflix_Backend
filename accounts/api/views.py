@@ -24,11 +24,12 @@ from django.core.exceptions import ValidationError
 
 
 class RegisterView(APIView):
+    """API endpoint for user registration."""
 
     permission_classes = [AllowAny]
 
     def post(self, request):
-
+        """Handle POST request to register a new user and send activation email."""
         serializer = RegisterSerializer(
             data=request.data
         )
@@ -59,6 +60,7 @@ class RegisterView(APIView):
 
 
 class ActivateAccountView(APIView):
+    """API endpoint to activate a user account via token from email."""
 
     permission_classes = [AllowAny]
 
@@ -68,7 +70,7 @@ class ActivateAccountView(APIView):
         uidb64,
         token,
     ):
-
+        """Handle GET request to verify activation token and activate the user."""
         try:
             uid = force_str(
                 urlsafe_base64_decode(uidb64)
@@ -115,6 +117,7 @@ class ActivateAccountView(APIView):
 
 
 class LoginView(APIView):
+    """API endpoint for user login, returning JWT tokens via cookies."""
 
     permission_classes = [AllowAny]
 
@@ -122,7 +125,7 @@ class LoginView(APIView):
         self,
         request,
     ):
-
+        """Handle POST request to authenticate user and set access/refresh cookies."""
         email = request.data.get(
             "email"
         )
@@ -181,6 +184,7 @@ class LoginView(APIView):
 
 
 class RefreshTokenView(APIView):
+    """API endpoint to refresh the access token using a valid refresh token cookie."""
 
     permission_classes = [AllowAny]
 
@@ -188,7 +192,7 @@ class RefreshTokenView(APIView):
         self,
         request,
     ):
-
+        """Handle POST request to issue a new access token from the refresh token."""
         refresh_token = request.COOKIES.get(
             "refresh_token"
         )
@@ -238,13 +242,14 @@ class RefreshTokenView(APIView):
 
 
 class LogoutView(APIView):
+    """API endpoint to blacklist the refresh token and clear auth cookies."""
 
     permission_classes = [
         AllowAny
     ]
 
     def post(self, request):
-
+        """Handle POST request to logout user by invalidating the refresh token."""
         refresh_token = request.COOKIES.get(
             "refresh_token"
         )
@@ -280,6 +285,7 @@ class LogoutView(APIView):
 
 
 class PasswordResetRequestView(APIView):
+    """API endpoint to request a password reset link via email."""
 
     permission_classes = [AllowAny]
 
@@ -287,7 +293,7 @@ class PasswordResetRequestView(APIView):
         self,
         request,
     ):
-
+        """Handle POST request to generate token and send password reset email."""
         email = request.data.get(
             "email"
         )
@@ -341,11 +347,12 @@ class PasswordResetRequestView(APIView):
 
 
 class PasswordResetConfirmView(APIView):
+    """API endpoint to confirm password reset with token and set a new password."""
 
     permission_classes = [AllowAny]
 
     def post(self, request):
-
+        """Handle POST request to validate token and update the user's password."""
         uid = request.data.get("uid")
         token = request.data.get("token")
         password = request.data.get("password")

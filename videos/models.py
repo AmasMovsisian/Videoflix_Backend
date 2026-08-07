@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Video(models.Model):
+    """Model representing a video with category, thumbnail and HLS streaming support."""
 
     CATEGORY_CHOICES = [
         ("Drama", "Drama"),
@@ -39,4 +40,5 @@ class Video(models.Model):
     )
 
     def __str__(self):
+        """Return the string representation (title) of the video."""
         return self.title

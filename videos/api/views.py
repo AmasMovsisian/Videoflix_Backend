@@ -13,6 +13,7 @@ from .serializers import VideoSerializer
 
 
 class VideoListView(generics.ListAPIView):
+    """API endpoint to list all videos with caching."""
 
     serializer_class = VideoSerializer
 
@@ -21,7 +22,7 @@ class VideoListView(generics.ListAPIView):
     ]
 
     def get_queryset(self):
-
+        """Return cached video queryset or fetch from database and cache it."""
         cached_videos = cache.get(
             "video_list"
         )
@@ -49,6 +50,7 @@ class VideoListView(generics.ListAPIView):
 
 
 class VideoHLSPlaylistView(APIView):
+    """API endpoint to serve HLS playlist file for a given video and resolution."""
 
     permission_classes = [
         IsAuthenticated
@@ -60,7 +62,7 @@ class VideoHLSPlaylistView(APIView):
         movie_id,
         resolution
     ):
-
+        """Return the index.m3u8 playlist file for the requested video."""
         try:
             Video.objects.get(
                 id=movie_id
@@ -96,6 +98,7 @@ class VideoHLSPlaylistView(APIView):
 
 
 class VideoHLSSegmentView(APIView):
+    """API endpoint to serve individual HLS segment files."""
 
     permission_classes = [
         IsAuthenticated
@@ -108,7 +111,7 @@ class VideoHLSSegmentView(APIView):
         resolution,
         segment
     ):
-
+        """Return the requested HLS segment file for the given video."""
         try:
             Video.objects.get(
                 id=movie_id

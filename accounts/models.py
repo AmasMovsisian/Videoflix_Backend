@@ -6,6 +6,7 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """Custom user model using email as the unique identifier."""
 
     email = models.EmailField(
         unique=True
@@ -30,4 +31,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
+        """Return the string representation (email) of the user."""
         return self.email

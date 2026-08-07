@@ -6,6 +6,7 @@ from .models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    """Admin interface configuration for the custom User model."""
 
     ordering = ("email",)
 
