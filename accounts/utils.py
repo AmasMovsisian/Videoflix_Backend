@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -39,18 +40,35 @@ def send_activation_email(user):
         token,
     )
 
-    send_mail(
+    context = {
+        "user": user,
+        "activation_url": activation_url,
+    }
+
+    text_content = render_to_string(
+        "emails/activation.txt",
+        context,
+    )
+
+    html_content = render_to_string(
+        "emails/activation.html",
+        context,
+    )
+
+    email = EmailMultiAlternatives(
         subject="Activate your Videoflix account",
-        message=(
-            "Welcome to Videoflix.\n\n"
-            "Activate your account here:\n\n"
-            f"{activation_url}"
-        ),
+        body=text_content,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[
+        to=[
             user.email,
         ],
-        fail_silently=False,
     )
+
+    email.attach_alternative(
+        html_content,
+        "text/html",
+    )
+
+    email.send()
 
     return token

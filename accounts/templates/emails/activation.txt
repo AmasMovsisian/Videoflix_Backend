@@ -1,0 +1,9 @@
+Welcome to Videoflix {{ user.username }}.
+
+Thank you for registering.
+
+Please activate your account by clicking this link:
+
+{{ activation_url }}
+
+If you did not create this account, you can ignore this email.
