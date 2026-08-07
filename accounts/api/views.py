@@ -313,15 +313,12 @@ class PasswordResetRequestView(APIView):
             force_bytes(user.pk)
         )
 
-        token = default_token_generator.make_token(
-            user
-        )
+        token = default_token_generator.make_token(user)
 
         reset_url = (
             f"{settings.FRONTEND_URL}"
-            f"/reset-password/"
-            f"{uid}/"
-            f"{token}/"
+            f"/pages/auth/confirm_password.html"
+            f"?uid={uid}&token={token}"
         )
 
         send_mail(
@@ -347,72 +344,71 @@ class PasswordResetConfirmView(APIView):
 
     permission_classes = [AllowAny]
 
-    def post(self, request):
-        """Handle POST request to validate token and update the user's password."""
-        uid = request.data.get("uid")
-        token = request.data.get("token")
-        password = request.data.get("password")
-        confirmed_password = request.data.get("confirmed_password")
+    def post(self, request, uidb64, token):
+        """Handle POST request to validate the reset token and set a new password."""
+
+        password = request.data.get("new_password")
+        confirmed_password = request.data.get("confirm_password")
 
         if password != confirmed_password:
             return Response(
                 {
-                    "message": "Passwords do not match."
+                    "detail": "Passwords do not match."
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
             user_id = force_str(
-                urlsafe_base64_decode(uid)
+                urlsafe_base64_decode(uidb64)
             )
 
-            user = User.objects.get(
-                pk=user_id
-            )
+            user = User.objects.get(pk=user_id)
 
-        except User.DoesNotExist:
+        except (
+            User.DoesNotExist,
+            ValueError,
+            TypeError,
+            OverflowError,
+        ):
             return Response(
                 {
-                    "message": "Invalid user."
+                    "detail": "Invalid user."
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         if not default_token_generator.check_token(
             user,
-            token
+            token,
         ):
             return Response(
                 {
-                    "message": "Invalid or expired token."
+                    "detail": "Invalid or expired token."
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
             validate_password(
                 password,
-                user
+                user,
             )
 
         except ValidationError as e:
             return Response(
                 {
-                    "message": e.messages
+                    "detail": e.messages
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user.set_password(
-            password
-        )
-
+        user.set_password(password)
         user.save()
 
         return Response(
             {
-                "message": "Your Password has been successfully reset."
+                "detail": "Your Password has been successfully reset."
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
