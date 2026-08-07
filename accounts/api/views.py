@@ -6,7 +6,8 @@ from django.utils.http import (
 )
 from django.contrib.auth import authenticate
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -313,7 +314,9 @@ class PasswordResetRequestView(APIView):
             force_bytes(user.pk)
         )
 
-        token = default_token_generator.make_token(user)
+        token = default_token_generator.make_token(
+            user
+        )
 
         reset_url = (
             f"{settings.FRONTEND_URL}"
@@ -321,15 +324,36 @@ class PasswordResetRequestView(APIView):
             f"?uid={uid}&token={token}"
         )
 
-        send_mail(
-            subject="Reset your Videoflix password",
-            message=(
-                "Reset your password here:\n\n"
-                f"{reset_url}"
-            ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user.email],
+        context = {
+            "user": user,
+            "reset_url": reset_url,
+        }
+
+        text_content = render_to_string(
+            "emails/password_reset.txt",
+            context,
         )
+
+        html_content = render_to_string(
+            "emails/password_reset.html",
+            context,
+        )
+
+        email = EmailMultiAlternatives(
+            subject="Reset your Videoflix password",
+            body=text_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[
+                user.email,
+            ],
+        )
+
+        email.attach_alternative(
+            html_content,
+            "text/html",
+        )
+
+        email.send()
 
         return Response(
             {

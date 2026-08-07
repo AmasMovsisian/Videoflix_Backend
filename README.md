@@ -113,7 +113,19 @@ EMAIL_HOST_PASSWORD=
 
 ---
 
-## 5. Build and Start the Containers
+## 5. Make the Entrypoint Script Executable (Linux/macOS)
+
+On Linux and macOS, make the entrypoint script executable before starting the containers:
+
+```bash
+chmod +x backend.entrypoint.sh
+```
+
+This step only needs to be done once after cloning the repository.
+
+---
+
+## 6. Build and Start the Containers
 
 ```bash
 docker compose up --build
@@ -129,7 +141,7 @@ During the first startup the entrypoint script automatically:
 
 ---
 
-## 6. Access the API
+## 7. Access the API
 
 Once the containers are running, the backend is available at:
 
